@@ -1,2 +1,2 @@
 # extratorDeDadosWeb
-mini project for extract some web info
+mini project for extract some web infos
