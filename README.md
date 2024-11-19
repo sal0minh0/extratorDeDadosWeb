@@ -1,2 +1,2 @@
 # extratorDeDadosWeb
-mini project for extract some web infos
+first time using library in python, doing a freelance job for a company 
