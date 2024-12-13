@@ -19,10 +19,10 @@ with open(caminho_arquivo, 'r', encoding=encoding) as arquivo:
 soup = BeautifulSoup(conteudo_html, 'lxml')
 
 # Encontra os titulos com as tags 'a' com classe 'collection-link'
-titulos = soup.find_all("a", class_="collection-link") # <---- ALTERE AQUI PELA CLASSE DE TÍTULOS
+titulos = soup.find_all("a", class_="collection-link") # <---- ALTERE AQUI A CLASSE DE TÍTULOS E A TAG CORRESPONDENTE
 
 # Encontra os preços com as tags 'a' com classe 'valor-por'
-precos = soup.find_all("a", class_="valor-por") # <---- ALTERE AQUI PELA CLASSE DE PREÇOS
+precos = soup.find_all("a", class_="valor-por") # <---- ALTERE AQUI A CLASSE DE PREÇOS E A TAG CORRESPONDENTE
 
 # Define o número mínimo de itens entre títulos e preços
 min_length = min(len(titulos), len(precos))
