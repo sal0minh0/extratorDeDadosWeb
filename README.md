@@ -13,7 +13,7 @@
 3. Extrair títulos e os preços (exemplos: [títulos.txt](titulos.txt) e [preços.txt](precos.txt))
 4. Gerei [números com um contador](contador.py) dependendo de cada linha no Excel;
 
-5. Reuni os dados numa panília do Excel.
+5. Reuni os dados numa panília do Excel já ordenados em ordem 0-9 e alfabetica.
 
 ### Novidade: Melhorias no Programa
 
@@ -24,7 +24,6 @@
 
 - [Python](https://www.python.org/)
 - [BeautifulSoup4](https://pypi.org/project/beautifulsoup4/)
-- [Requests](https://pypi.org/project/requests/)
 - [Chardet](https://pypi.org/project/chardet/)
 - [Pandas](https://pandas.pydata.org/)
 
@@ -37,7 +36,6 @@
 
 ```py
     pip install beautifulsoup4
-    pip install requests
     pip install chardet
     pip install pandas
 ```

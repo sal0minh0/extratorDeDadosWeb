@@ -1,0 +1,1 @@
+## Dados extraídos antes da melhoria de extrair para o excel
