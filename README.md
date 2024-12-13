@@ -6,7 +6,7 @@
 
 1. Extrair dados de uma página Html;
 
-- Baixei 4 páginas do Acervo Virtual para a empresa pelo site da [Estante Virtual](https://www.estantevirtual.com.br/);
+> Baixei 4 páginas do Acervo Virtual para a empresa pelo site da [Estante Virtual](https://www.estantevirtual.com.br/) com 713 Itens;
 
 2. Verifiquei um padrão com as tags "td" (table data) com as classes html relacionadas a títulos (acervo-titulo) e os preços (acervo-preco text-center). Daí eu poderia:
 
