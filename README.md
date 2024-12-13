@@ -17,7 +17,8 @@
 
 2. Verifiquei um padrão com as tags `td` (table data) com as classes Html relacionadas a `Títulos` (acervo-titulo) e os `Preços` (acervo-preco text-center). Daí eu poderia:
 
-3. Extrair títulos e os preços ([títulos.txt](titulos.txt) e [preços.txt](precos.txt))
+3. Extrair títulos e os preços ([títulos.txt](titulos.txt) e [preços.txt](precos.txt));
+
 4. Gerei [números com um contador](contador.py) dependendo de cada linha no Excel;
 
 5. E reunir os dados numa panília do Excel já ordenados em ordem 0-9 e alfabetica.
