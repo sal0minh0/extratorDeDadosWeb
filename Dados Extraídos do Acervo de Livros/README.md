@@ -1,1 +1,1 @@
-## Dados extraídos antes da melhoria de extrair para o excel
+## Dados extraídos antes da melhoria de extrair para o excel -> não está todos os dados
