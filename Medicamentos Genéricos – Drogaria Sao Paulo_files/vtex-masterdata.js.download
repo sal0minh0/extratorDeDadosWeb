@@ -1,0 +1,64 @@
+$ = $ || {};
+$.vtex_masterdata = function (e) {
+    if (!window.jQuery) {
+        return;
+    }
+    var n = jQuery.extend({
+            entity_sigla: "",
+            seller: ""
+        }, e),
+        i = {
+            masterDataURL: "/" + n.seller + "/dataentities/" + n.entity_sigla,
+            init: function (t) {},
+            post: function (e) {
+                if (null == e) throw new Error("Can't create todo without data");
+                return jQuery.ajax({
+                    headers: {
+                        Accept: "application/json; charset=utf-8",
+                        "Content-Type": "application/json; charset=utf-8"
+                    },
+                    type: "POST",
+                    url: i.masterDataURL + "/documents",
+                    data: JSON.stringify(e)
+                }).then(function (t) {
+                    return t
+                })
+            },
+            update: function (e, n) {
+                return jQuery.ajax({
+                    headers: {
+                        Accept: "application/json; charset=utf-8",
+                        "Content-Type": "application/json; charset=utf-8"
+                    },
+                    type: "PATCH",
+                    data: JSON.stringify(n),
+                    url: i.masterDataURL + "/documents/" + e
+                })
+            },
+            get: function (e, n, r) {
+                var o = i.masterDataURL + "/search/?_where=" + n + "&_fields=" + e;
+                return jQuery.ajax({
+                    headers: {
+                        Accept: "application/json; charset=utf-8",
+                        "Content-Type": "application/json; charset=utf-8",
+                        "REST-Range": "resources=" + r
+                    },
+                    method: "GET",
+                    url: o
+                })
+            },
+            refresh: function () {
+                i.init()
+            }
+        };
+    i.init();
+    var r = function () {
+        return {
+            get: i.get,
+            post: i.post,
+            update: i.update,
+            refresh: i.refresh
+        }
+    };
+    return r()
+};

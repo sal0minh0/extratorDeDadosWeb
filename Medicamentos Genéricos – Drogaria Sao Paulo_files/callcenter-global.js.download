@@ -1,0 +1,101 @@
+/* eslint-disable */
+'use strict';
+
+window.CALLCENTER_GLOBAL_VERSION = '2.33.3';
+window.CALLCENTER_GLOBAL_TIME = '2023-12-01-001';
+
+window.CALLCENTER_GLOBAL_CDNDOMAIN = 'https://vtex-telesales-tools-dpsp.online.pro.br';
+
+var url = new URL(window.location.href);
+var versionPreview = url.searchParams.get('televendas-preview');
+
+if (versionPreview) {
+  window.CALLCENTER_GLOBAL_VERSION = versionPreview;
+  window.CALLCENTER_GLOBAL_CDNDOMAIN = `https://${versionPreview}.vtex-telesales-tools-dpsp.pages.dev`;
+  CALLCENTER_GLOBAL_TIME = new Date().getTime();
+}
+
+(function () {
+  if (
+    window.location.hostname.indexOf('localhost.com') > -1 ||
+    window.location.hostname.indexOf('0.0.0.0') > -1
+  ) {
+    window.CALLCENTER_GLOBAL_CDNDOMAIN = window.location.protocol + '//' + window.location.host;
+  }
+  var prefixLogName = '🧩 callcenter-global.js ';
+  var callCenterGlobalInit = function () {
+    // (document.cookie || '').indexOf('vtex-impersonated-customer-email') === -1
+
+    console.log('🧩 callcenter-global.js ready ' + CALLCENTER_GLOBAL_VERSION);
+
+    (function () {
+      var head = document.getElementsByTagName('head')[0];
+
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src =
+        CALLCENTER_GLOBAL_CDNDOMAIN +
+        '/callcenter-global-complement.js?v=' +
+        CALLCENTER_GLOBAL_VERSION +
+        '&t=' +
+        CALLCENTER_GLOBAL_TIME;
+      head.appendChild(script);
+
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href =
+        CALLCENTER_GLOBAL_CDNDOMAIN +
+        '/callcenter-global-complement.css?v=' +
+        CALLCENTER_GLOBAL_VERSION +
+        '&t=' +
+        CALLCENTER_GLOBAL_TIME;
+      head.appendChild(link);
+    })();
+  };
+
+  var callCenterGlobalRemapSalesChannelXhr = function (options) {
+    if (options.url.indexOf('api/checkout/pub/orderForm') > -1) {
+      // console.log(prefixLogName, 'callCenterGlobalRemapSalesChannelXhr exec');
+      var salesChannelCallcenter = (
+        (function (name) {
+          var nameEQ = name + '=';
+          var ca = document.cookie.split(';');
+          for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+          }
+          return null;
+        })('VTEXSC') || ''
+      ).replace('sc=', '');
+      // prevent send salesChannel fixed in code, and use from cookie
+      if (options.url.indexOf('sc=') > -1) {
+        options.url = options.url.replace(/(sc=[0-9])/, 'sc=' + salesChannelCallcenter);
+      } else {
+        options.url =
+          options.url +
+          (options.url.indexOf('?') > -1 ? '&' : '?') +
+          ('sc=' + salesChannelCallcenter);
+      }
+    }
+    return options;
+  };
+
+  if (
+    window.location.hostname.indexOf('localhost.com') > -1 ||
+    window.location.hostname.indexOf('0.0.0.0') > -1 ||
+    window.location.hostname.indexOf('myvtex.com') > -1 ||
+    window.location.hostname.indexOf('vtexcommercestable.com.br') > -1
+  ) {
+    $.ajaxPrefilter(callCenterGlobalRemapSalesChannelXhr);
+    if (window.jQueryDefaultVtex) {
+      window.jQueryDefaultVtex.ajaxPrefilter(callCenterGlobalRemapSalesChannelXhr);
+    }
+
+    if (document.readyState !== 'loading') {
+      callCenterGlobalInit();
+    } else {
+      document.addEventListener('DOMContentLoaded', callCenterGlobalInit);
+    }
+  }
+})();

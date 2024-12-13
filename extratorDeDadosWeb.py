@@ -1,16 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
-# a biblitoteca bs4 é um html parser ou xml parser
 import chardet
-# bibliote chardet é usada para detectar a codificação de textos ou arquivos
+import pandas as pd
 
 # Caminho para o arquivo HTML
-caminho_arquivo = 'arquivo_exemplo.html'
+caminho_arquivo = 'MedicamentosGenericos.html'
 
 # Detecta a codificação do arquivo
 with open(caminho_arquivo, 'rb') as arquivo:
-    raw_data = arquivo.read()
-    resultado = chardet.detect(raw_data)
+    dados = arquivo.read()
+    resultado = chardet.detect(dados)
     encoding = resultado['encoding']
 
 # Agora, use a codificação detectada para abrir o arquivo
@@ -20,14 +19,14 @@ with open(caminho_arquivo, 'r', encoding=encoding) as arquivo:
 # Parseia o conteúdo HTML usando o BeautifulSoup
 soup = BeautifulSoup(conteudo_html, 'lxml')
 
-# Encontra as tags 'td' com classe 'acervo-titulo'
-titulos = soup.find_all("td", class_="acervo-titulo")
+# Encontra os titulos as tags 'td' com classe 'acervo-titulo'
+titulos = soup.find_all("td", class_="collection-link")
 
 # Para cada 'td', encontra o título dentro da tag 'strong'
 titulos_strong = [td.find("strong") for td in titulos if td.find("strong")]
 
 # Encontra os preços
-precos = soup.find_all("td", class_="acervo-preco text-center")
+precos = soup.find_all("td", class_="valor-por") <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<- MODIFICAR PELAS CLASSES DESSA PAGINA
 
 # Define o número mínimo de itens entre títulos e preços
 min_length = min(len(titulos_strong), len(precos))
@@ -38,24 +37,26 @@ titulos_precos = [(titulos_strong[i].get_text(strip=True), precos[i].get_text(st
 # Ordena a lista de tuplas com base no título (primeiro elemento da tupla)
 titulos_precos_ordenados = sorted(titulos_precos, key=lambda x: x[0])
 
+# Cria um DataFrame do pandas
+df = pd.DataFrame(titulos_precos_ordenados, columns=['Título', 'Preço'])
+
 # Caminho do arquivo de saída
-caminho_saida = 'precos4.txt'
+caminho_saida_excel = 'precos.xlsx'
 
-# Escreve os títulos e preços ordenados em um arquivo de texto
-with open(caminho_saida, 'w', encoding='utf-8') as arquivo_saida:
-    for titulo, preco in titulos_precos_ordenados:
-        arquivo_saida.write(f"{preco}\n")
-        # Exibe os títulos restantes sem preços, se houver
-    if len(titulos_strong) > min_length:
-        print("\nTítulos sem preços correspondentes:\n")
-        for i in range(min_length, len(titulos_strong)):
-            print(f"{titulos_strong[i].get_text(strip=True)}")
-
-# Exibe os preços restantes sem títulos, se houver
-    if len(precos) > min_length:
-        print("\nPreços sem títulos correspondentes:\n")
-        for i in range(min_length, len(precos)):
-            print(f"{precos[i].get_text(strip=True)}")
+# Salva o DataFrame em um arquivo Excel
+df.to_excel(caminho_saida_excel, index=False)
 
 # Mensagem de confirmação
-print(f"Lista de títulos e preços foi escrita em '{caminho_saida}'.")
+print(f"Lista de títulos e preços foi escrita em '{caminho_saida_excel}'.")
+
+# Exibe os títulos restantes sem preços, se houver
+if len(titulos_strong) > min_length:
+    print("\nTítulos sem preços correspondentes:\n")
+    for i in range(min_length, len(titulos_strong)):
+        print(f"{titulos_strong[i].get_text(strip=True)}")
+
+# Exibe os preços restantes sem títulos, se houver
+if len(precos) > min_length:
+    print("\nPreços sem títulos correspondentes:\n")
+    for i in range(min_length, len(precos)):
+        print(f"{precos[i].get_text(strip=True)}")
