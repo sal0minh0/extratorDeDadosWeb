@@ -1,14 +1,11 @@
-import requests
 from bs4 import BeautifulSoup
-import lxml
 import chardet
 import pandas as pd
-import openpyxl
 
-# Caminho para o arquivo HTML
+# Caminho para o arquivo Web
 caminho_arquivo = 'MedicamentosGenericos.html'
 
-# Detecta a codificação do arquivo
+# Verifica a codificação do arquivo
 with open(caminho_arquivo, 'rb') as arquivo:
     dados = arquivo.read()
     resultado = chardet.detect(dados)
@@ -21,11 +18,11 @@ with open(caminho_arquivo, 'r', encoding=encoding) as arquivo:
 # Parseia o conteúdo HTML usando o BeautifulSoup
 soup = BeautifulSoup(conteudo_html, 'lxml')
 
-# Encontra os titulos as tags 'a' com classe 'collection-link'
-titulos = soup.find_all("a", class_="collection-link")
+# Encontra os titulos com as tags 'a' com classe 'collection-link'
+titulos = soup.find_all("a", class_="collection-link") # <---- ALTERE AQUI PELA CLASSE DE TÍTULOS
 
-# Encontra os preços
-precos = soup.find_all("a", class_="valor-por")
+# Encontra os preços com as tags 'a' com classe 'valor-por'
+precos = soup.find_all("a", class_="valor-por") # <---- ALTERE AQUI PELA CLASSE DE PREÇOS
 
 # Define o número mínimo de itens entre títulos e preços
 min_length = min(len(titulos), len(precos))
@@ -36,25 +33,25 @@ titulos_precos = [(titulos[i].get_text(strip=True), precos[i].get_text(strip=Tru
 # Ordena a lista de tuplas com base no título (primeiro elemento da tupla)
 titulos_precos_ordenados = sorted(titulos_precos, key=lambda x: x[0])
 
-# Cria um DataFrame do pandas
+# Cria um DataFrame pela biblioteca pandas para enviar os dados para a Planília
 df = pd.DataFrame(titulos_precos_ordenados, columns=['Título', 'Preço'])
 
 # Caminho do arquivo de saída
-caminho_saida_excel = 'remedios.xlsx'
+caminho_saida_excel = 'remedios.xlsx' # <---- ALTERE AQUI PELO NOME QUE VOCÊ QUISER, SERÁ A PLANÍLIA GERADA 
 
-# Salva o DataFrame em um arquivo Excel
+# Salva o DataFrame no arquivo Excel
 df.to_excel(caminho_saida_excel, index=False)
 
-# Mensagem de confirmação
+# Mensagem de confirmação que a operação foi um sucesso
 print(f"Lista de títulos e preços foi escrita em '{caminho_saida_excel}'.")
 
-# Exibe os títulos restantes sem preços, se houver
+# Se houver exibe os títulos restantes sem preços
 if len(titulos) > min_length:
     print("\nTítulos sem preços correspondentes:\n")
     for i in range(min_length, len(titulos)):
         print(f"{titulos[i].get_text(strip=True)}")
 
-# Exibe os preços restantes sem títulos, se houver
+# Se houver exibe os preços restantes sem títulos
 if len(precos) > min_length:
     print("\nPreços sem títulos correspondentes:\n")
     for i in range(min_length, len(precos)):
