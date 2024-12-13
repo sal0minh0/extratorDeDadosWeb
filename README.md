@@ -32,7 +32,7 @@
 
 - [Python](https://www.python.org/) 🐍
 - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc.ptbr/) 🍲
-- [Chardet](https://pypi.org/project/chardet/) 🔓
+- [Chardet](https://chardet.readthedocs.io/en/latest/index.html) 🔓
 - [Pandas](https://pandas.pydata.org/) 📄
 
 ## Verifique que você tenha Python, BeautifulSoup, o Chardet e o Pandas instalado:
