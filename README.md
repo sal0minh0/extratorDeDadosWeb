@@ -62,7 +62,7 @@
 
 1. Clone esse repositório na sua máquina local e instale o [Python](<(https://www.python.org/downloads/)>) e as bibliotecas
 2. Pegue seu arquivo Html/Xml e coloque nessa pasta clonada
-3. Verfique na sua página os padrões de títulos e preços (em que classe estão armenadas)
+3. Verfique na sua página os padrões de títulos e preços (Inspecione para ver em que classe estão armenadas e sua tag)
 4. Altere essas linhas de código para extrair corretamente:
 
 <div align="center">
